@@ -13,16 +13,25 @@ MathNode = Union[int, "MathOp"]
 
 
 def makeOps(val1: MathNode, val2: MathNode) -> Generator["MathOp", None, None]:
+    # Zeroes are always trivial
+    if int(val1) == 0 or int(val2) == 0:
+        return
+    # Plus is always valid
     yield MathOp(val1, "+", val2)
+    # *1 is trivial, otherwise all mul is valid
     if int(val1) != 1 and int(val2) != 1:
         yield MathOp(val1, "*", val2)
+    # Negative results are invalid,
+    # and 0 results are trivial.
     if int(val1) > int(val2):
         yield MathOp(val1, "-", val2)
-    else:
+    elif int(val2) > int(val1):
         yield MathOp(val2, "-", val1)
-    if int(val2) not in (0, 1) and int(val1) % int(val2) == 0:
+    # Fractional results are invalid,
+    # and /1 is trivial.
+    if int(val2) != 1 and int(val1) % int(val2) == 0:
         yield MathOp(val1, "/", val2)
-    if int(val1) not in (0, 1) and int(val2) % int(val1) == 0:
+    if int(val1) != 1 and int(val2) % int(val1) == 0:
         yield MathOp(val2, "/", val1)
 
 
