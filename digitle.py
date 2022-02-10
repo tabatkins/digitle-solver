@@ -12,7 +12,7 @@ T = typing.TypeVar("T")
 MathNode = Union[int, "MathOp"]
 
 
-def makeOps(val1: MathNode, val2: MathNode) -> Generator[MathOp, None, None]:
+def makeOps(val1: MathNode, val2: MathNode) -> Generator["MathOp", None, None]:
     yield MathOp(val1, "+", val2)
     if int(val1) != 1 and int(val2) != 1:
         yield MathOp(val1, "*", val2)
@@ -28,13 +28,13 @@ def makeOps(val1: MathNode, val2: MathNode) -> Generator[MathOp, None, None]:
 
 def genExprs(nums: Sequence[int]) -> Generator[MathNode, None, None]:
     # Initial list gives the size-1 results
-    exprs: List[List[MathOp]] = [[], [], [], [], [], [], []]
+    exprs: List[List["MathOp"]] = [[], [], [], [], [], [], []]
 
     nums = list(nums)
     yield from nums
 
     # combine them to get the size-2 results
-    for lhs, rhs in itertools.combinations(exprs[1], 2):
+    for lhs, rhs in itertools.combinations(nums, 2):
         exprs[2].extend(makeOps(lhs, rhs))
     yield from exprs[2]
 
@@ -159,7 +159,7 @@ def getOp(node: MathNode) -> str:
 def solve(target, nums):
     bestExpr = (None, float("inf"))
     seen = set()
-    for i, expr in enumerate(gen2(nums)):
+    for i, expr in enumerate(genExprs(nums)):
         val = int(expr)
         error = abs(val - target)
         if error < bestExpr[1] or error == 0:
