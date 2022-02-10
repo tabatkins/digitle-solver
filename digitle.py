@@ -102,8 +102,7 @@ class MathOp:
 
             # Add parens if necessary for precedence
             if self.op == "+":
-                if getOp(self.val1) == "-":
-                    str1 = parens(str1)
+                pass
             elif self.op == "*":
                 if getOp(self.val1) in "+-":
                     str1 = parens(str1)
