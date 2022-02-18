@@ -135,20 +135,22 @@ def getOp(node: MathNode) -> str:
         return node.op
 
 
-def solve(target, nums):
-    bestExpr = (None, float("inf"))
-    seen = set()
+def solve(target: int, nums: Sequence[int]) -> Tuple[MathNode, int]:
+    bestOp: MathNode
+    bestError: int = 10**6
+    seen: Set[str] = set()
     for i, expr in enumerate(genExprs(nums)):
         val = int(expr)
         error = abs(val - target)
-        if error < bestExpr[1] or error == 0:
-            bestExpr = (expr, error)
+        if error < bestError or error == 0:
+            bestOp = expr
+            bestError = error
             s = str(expr)
             if s not in seen:
                 print(s, error)
                 seen.add(s)
     print(f"{i} expressions tested")
-    return bestExpr
+    return (bestOp, bestError)
 
 
 if __name__ == "__main__":
